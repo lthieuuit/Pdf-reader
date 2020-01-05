@@ -159,23 +159,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //QuoteBank quoteBank = new QuoteBank(context);
-        PDFView View;
-        TextView txt_view;
-        if (requestCode == 1000 && resultCode == RESULT_OK) {
-            filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-            // Do anything with file
-            View = (PDFView) findViewById(R.id.pdfView);
-            View.fromFile(new File(filePath)).load();
 
-            txt_view = (TextView) findViewById(R.id.textview_txt);
-
-            txt_view.setText(ReadTxt(filePath));
-            //try {
-           //     InputStream is = mContext.getAssets().open(filePath);
-        //    } catch (IOException e) {
-          //      e.printStackTrace();
-        //    }
-        }
     }
 
     @Override
@@ -193,6 +177,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void Showpdf(int requestCode, int resultCode, Intent data) {
+        PDFView View;
+        TextView txt_view;
+        if (requestCode == 1000 && resultCode == RESULT_OK) {
+            filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            // Do anything with file
+            View = (PDFView) findViewById(R.id.pdfView);
+            View.fromFile(new File(filePath)).load();
+        }
+    }
+    public void Showtxt(int requestCode, int resultCode, Intent data) {
+        TextView txt_view;
+        if (requestCode == 1000 && resultCode == RESULT_OK) {
+            filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
 
+            txt_view = (TextView) findViewById(R.id.textview_txt);
 
+            txt_view.setText(ReadTxt(filePath));
+    }
+    }
+// lấy dịnh dạng file
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
+    }
 }
