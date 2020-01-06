@@ -12,5 +12,6 @@
 	![alt text](link)
 
 ## Sinh viên thực hiện 
-	 Phạm Như Hiếu - 17520482
+	 Lê Trung Hiếu
+	 Lê Đoàn
 		
