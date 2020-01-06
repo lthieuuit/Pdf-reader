@@ -6,15 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
-import android.content.res.AssetManager;
+
 import android.os.Build;
 import android.os.Bundle;
 
 import com.github.barteksc.pdfviewer.PDFView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -36,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,18 +41,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.net.Uri;
-import android.provider.OpenableColumns;
-import android.util.Log;
-import android.widget.Toast;
-
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -169,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
                 View.setVisibility(View.VISIBLE);
                 txt_view.setVisibility(View.INVISIBLE);
                 View.fromFile(new File(filePath)).load();
+                try {
+                    Getrecentfile(filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (getFileExtension(filePath).equalsIgnoreCase(".txt") == true)
             {
@@ -244,4 +241,37 @@ public class MainActivity extends AppCompatActivity {
         }
         return name.substring(lastIndexOf);
     }
+    private static String getFileName(String filepath) {
+        String name = filepath;
+        int lastIndexOf = name.lastIndexOf("\\");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
+    }
+    public static void Getrecentfile(String Filepath) throws IOException {
+        InputStream inStream = null;
+        OutputStream outStream = null;
+
+        try {
+            inStream = new FileInputStream(new File(Filepath));
+            String destfile ="C:\\Users\\Hieu Le\\Documents\\GitHub\\Pdf-reader\\app\\Recent" + getFileName(Filepath) ;
+            outStream = new FileOutputStream(new File(destfile));
+
+            int length;
+            byte[] buffer = new byte[1024];
+
+            // copy the file content in bytes
+            while ((length = inStream.read(buffer)) > 0) {
+                outStream.write(buffer, 0, length);
+            }
+            System.out.println("File is copied successful!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            inStream.close();
+            outStream.close();
+        }
+    }
+
 }
