@@ -155,11 +155,25 @@ public class MainActivity extends AppCompatActivity {
         return text.toString();
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //QuoteBank quoteBank = new QuoteBank(context);
-
+        if (requestCode == 1000 && resultCode == RESULT_OK) {
+            filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            //TextView tw2;
+            //tw2 = (TextView) findViewById(R.id.textView2);
+            //tw2.setText(getFileExtension(filePath));
+            if (getFileExtension(filePath) == ".pdf") {
+                Showpdf(1000, RESULT_OK, data);
+            }
+            else if (getFileExtension(filePath) == ".txt") {
+                Showtxt(1000, RESULT_OK, data);
+            }
+            else Toast.makeText(this, "Xin chọn file .PDF hoặc .TXT", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -177,29 +191,44 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public void Showpdf(int requestCode, int resultCode, Intent data) {
+        //if (requestCode == 1000 && resultCode == RESULT_OK) {
         PDFView View;
         TextView txt_view;
-        if (requestCode == 1000 && resultCode == RESULT_OK) {
-            filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-            // Do anything with file
-            View = (PDFView) findViewById(R.id.pdfView);
-            View.fromFile(new File(filePath)).load();
-        }
+        filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+        // Do anything with file
+
+
+        View = (PDFView) findViewById(R.id.pdfView);
+        txt_view = (TextView) findViewById(R.id.textview_txt);
+
+
+        View.setVisibility(View.VISIBLE);
+        txt_view.setVisibility(View.INVISIBLE);
+
+        View.fromFile(new File(filePath)).load();
+        //}
     }
     public void Showtxt(int requestCode, int resultCode, Intent data) {
-        TextView txt_view;
+
         if (requestCode == 1000 && resultCode == RESULT_OK) {
+            PDFView View;
+            TextView txt_view;
             filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
 
+            View = (PDFView) findViewById(R.id.pdfView);
             txt_view = (TextView) findViewById(R.id.textview_txt);
 
+            View.setVisibility(View.INVISIBLE);
+            txt_view.setVisibility(View.VISIBLE);
+
             txt_view.setText(ReadTxt(filePath));
+        }
     }
-    }
-// lấy dịnh dạng file
-    private String getFileExtension(File file) {
-        String name = file.getName();
+    // lấy dịnh dạng file
+    private String getFileExtension(String filepath) {
+        String name = filepath;
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf == -1) {
             return ""; // empty extension
