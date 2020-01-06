@@ -6,15 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
-import android.content.res.AssetManager;
+
 import android.os.Build;
 import android.os.Bundle;
 
 import com.github.barteksc.pdfviewer.PDFView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -43,7 +40,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
 
+
 import android.widget.RelativeLayout;
+
+import android.widget.ListView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +73,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import java.io.OutputStream;
+
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -76,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        bindView();
 
 //        ViewPager pager = findViewById(R.id.viewpager_home);
 //        PageAdapter pageAdapter = new PageAdapter(getSupportFragmentManager());
@@ -92,59 +99,52 @@ public class MainActivity extends AppCompatActivity {
 
 //
 
-    }
-     private void bindView(){
 
-         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
-         {
-             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1001);
-         }
-         Toolbar toolbar = findViewById(R.id.toolbar);
-         setSupportActionBar(toolbar);
-         FloatingActionButton fab = findViewById(R.id.fab);
-         fab.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 Snackbar.make(view, "Gui email", Snackbar.LENGTH_LONG)
-                         .setAction("Action", null).show();
-             }
-         });
-         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-         NavigationView navigationView = findViewById(R.id.nav_view);
-         // Passing each menu ID as a set of Ids because each
-         // menu should be considered as top level destinations.
-         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                 R.id.nav_home, R.id.nav_openfile, R.id.nav_recents,
-                 R.id.nav_favorites, R.id.nav_share, R.id.nav_send)
-                 .setDrawerLayout(drawer)
-                 .build();
-         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-         NavigationUI.setupWithNavController(navigationView, navController);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1001);
+        }
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-             @Override
-             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_openfile, R.id.nav_recents,
+                R.id.nav_favorites, R.id.nav_share, R.id.nav_send)
+                .setDrawerLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
-                 if (destination.getId() == R.id.nav_home){
-                     Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_LONG).show();
-                 }
-                 if (destination.getId() == R.id.nav_openfile){
-                     Toast.makeText(MainActivity.this, "Đã chọn Open File", Toast.LENGTH_LONG).show();
-                 }
-                 if (destination.getId() == R.id.nav_recents){
-                     Toast.makeText(MainActivity.this, "Đã chọn Recents", Toast.LENGTH_LONG).show();
-                 }
-                 if (destination.getId() == R.id.nav_favorites){
-                     Toast.makeText(MainActivity.this, "Đã chọn Favorites", Toast.LENGTH_LONG).show();
-                 }
-             }
-         });
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+
+                if (destination.getId() == R.id.nav_home){
+                    Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_LONG).show();
+                }
+                if (destination.getId() == R.id.nav_openfile){
+                    Toast.makeText(MainActivity.this, "Đã chọn Open File", Toast.LENGTH_LONG).show();
+                }
+                if (destination.getId() == R.id.nav_recents){
+                    Toast.makeText(MainActivity.this, "Đã chọn Recents", Toast.LENGTH_LONG).show();
+                }
+                if (destination.getId() == R.id.nav_favorites){
+                    Toast.makeText(MainActivity.this, "Đã chọn Favorites", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
 //         TabLayout tabLayout = findViewById(R.id.tab_home);
 //         tabLayout.setupWithViewPager(pager);
-     }
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -212,6 +212,11 @@ public class MainActivity extends AppCompatActivity {
                 View.setVisibility(View.VISIBLE);
                 txt_view.setVisibility(View.INVISIBLE);
                 View.fromFile(new File(filePath)).load();
+                try {
+                    Getrecentfile(filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (getFileExtension(filePath).equalsIgnoreCase(".txt") == true)
             {
@@ -287,4 +292,37 @@ public class MainActivity extends AppCompatActivity {
         }
         return name.substring(lastIndexOf);
     }
+    private static String getFileName(String filepath) {
+        String name = filepath;
+        int lastIndexOf = name.lastIndexOf("\\");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
+    }
+    public static void Getrecentfile(String Filepath) throws IOException {
+        InputStream inStream = null;
+        OutputStream outStream = null;
+
+        try {
+            inStream = new FileInputStream(new File(Filepath));
+            String destfile ="C:\\Users\\Hieu Le\\Documents\\GitHub\\Pdf-reader\\app\\Recent" + getFileName(Filepath) ;
+            outStream = new FileOutputStream(new File(destfile));
+
+            int length;
+            byte[] buffer = new byte[1024];
+
+            // copy the file content in bytes
+            while ((length = inStream.read(buffer)) > 0) {
+                outStream.write(buffer, 0, length);
+            }
+            System.out.println("File is copied successful!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            inStream.close();
+            outStream.close();
+        }
+    }
+
 }
