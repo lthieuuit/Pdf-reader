@@ -161,16 +161,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //QuoteBank quoteBank = new QuoteBank(context);
+
         if (requestCode == 1000 && resultCode == RESULT_OK) {
             filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             //TextView tw2;
             //tw2 = (TextView) findViewById(R.id.textView2);
             //tw2.setText(getFileExtension(filePath));
-            if (getFileExtension(filePath) == ".pdf") {
-                Showpdf(1000, RESULT_OK, data);
+            if (getFileExtension(filePath).equalsIgnoreCase(".pdf") == true) {
+                PDFView View;
+                TextView txt_view;
+                View = (PDFView) findViewById(R.id.pdfView);
+                txt_view = (TextView) findViewById(R.id.textview_txt);
+                View.setVisibility(View.VISIBLE);
+                txt_view.setVisibility(View.INVISIBLE);
+                View.fromFile(new File(filePath)).load();
             }
-            else if (getFileExtension(filePath) == ".txt") {
-                Showtxt(1000, RESULT_OK, data);
+            else if (getFileExtension(filePath).equalsIgnoreCase(".txt") == true)
+            {
+                PDFView View;
+                TextView txt_view;
+                View = (PDFView) findViewById(R.id.pdfView);
+                txt_view = (TextView) findViewById(R.id.textview_txt);
+                View.setVisibility(View.INVISIBLE);
+                txt_view.setVisibility(View.VISIBLE);
+
+                txt_view.setText(ReadTxt(filePath));
             }
             else Toast.makeText(this, "Xin chọn file .PDF hoặc .TXT", Toast.LENGTH_SHORT).show();
         }
@@ -193,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void Showpdf(int requestCode, int resultCode, Intent data) {
-        //if (requestCode == 1000 && resultCode == RESULT_OK) {
+        if (requestCode == 1000 && resultCode == RESULT_OK) {
         PDFView View;
         TextView txt_view;
         filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
@@ -208,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         txt_view.setVisibility(View.INVISIBLE);
 
         View.fromFile(new File(filePath)).load();
-        //}
+        }
     }
     public void Showtxt(int requestCode, int resultCode, Intent data) {
 
