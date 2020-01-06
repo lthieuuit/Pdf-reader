@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import com.github.barteksc.pdfviewer.PDFView;
 
+import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +51,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -161,11 +167,6 @@ public class MainActivity extends AppCompatActivity {
                 View.setVisibility(View.VISIBLE);
                 txt_view.setVisibility(View.INVISIBLE);
                 View.fromFile(new File(filePath)).load();
-                try {
-                    Getrecentfile(filePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
             else if (getFileExtension(filePath).equalsIgnoreCase(".txt") == true)
             {
@@ -249,28 +250,107 @@ public class MainActivity extends AppCompatActivity {
         }
         return name.substring(lastIndexOf);
     }
-    public static void Getrecentfile(String Filepath) throws IOException {
-        InputStream inStream = null;
-        OutputStream outStream = null;
+    ProductListViewAdapter productListViewAdapter;
+    ListView listViewProduct;
 
-        try {
-            inStream = new FileInputStream(new File(Filepath));
-            String destfile ="C:\\Users\\Hieu Le\\Documents\\GitHub\\Pdf-reader\\app\\Recent" + getFileName(Filepath) ;
-            outStream = new FileOutputStream(new File(destfile));
+    ListView listViewrecent;
+    public void Getrecentfile(String Filepath){
+        //productListViewAdapter = new ProductListViewAdapter(listViewrecent);
 
-            int length;
-            byte[] buffer = new byte[1024];
+        listViewrecent = findViewById(R.id.listrecent);
+        listViewrecent.setAdapter(productListViewAdapter);
+    }
+    //Model phần tử dữ liệu hiện
+    class Product {
+        String name;
+        int price;
+        int productID;
 
-            // copy the file content in bytes
-            while ((length = inStream.read(buffer)) > 0) {
-                outStream.write(buffer, 0, length);
-            }
-            System.out.println("File is copied successful!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            inStream.close();
-            outStream.close();
+        public Product(int productID, String name, int price) {
+            this.name = name;
+            this.price = price;
+            this.productID = productID;
+        }
+
+    }
+
+    class ProductListViewAdapter extends BaseAdapter {
+
+        //Dữ liệu liên kết bởi Adapter là một mảng các sản phẩm
+        final ArrayList<Product> listProduct;
+
+        ProductListViewAdapter(ArrayList<Product> listProduct) {
+            this.listProduct = listProduct;
+        }
+
+        @Override
+        public int getCount() {
+            //Trả về tổng số phần tử, nó được gọi bởi ListView
+            return listProduct.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            //Trả về dữ liệu ở vị trí position của Adapter, tương ứng là phần tử
+            //có chỉ số position trong listProduct
+            return listProduct.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            //Trả về một ID của phần
+            return listProduct.get(position).productID;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //convertView là View của phần tử ListView, nếu convertView != null nghĩa là
+            //View này được sử dụng lại, chỉ việc cập nhật nội dung mới
+            //Nếu null cần tạo mới
+
+            View viewProduct;
+            if (convertView == null) {
+                viewProduct = View.inflate(parent.getContext(), R.layout.product_view, null);
+            } else viewProduct = convertView;
+
+            //Bind sữ liệu phần tử vào View
+            Product product = (Product) getItem(position);
+            ((TextView) viewProduct.findViewById(R.id.nameproduct)).setText(String.format("Tên SP : %s", product.name));
+
+
+
+            return viewProduct;
+        }
+    }
+    class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            //Cần trả về số phần tử mà ListView hiện thị
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            //Cần trả về đối tượng dữ liệu phần tử ở vị trí position
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            //Trả về một ID liên quan đến phần tử ở vị trí position
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //convertView là View hiện thị phần tử, nếu là null cần tạo mới
+            //(có thể nạp từ layout bằng View.inflate)
+
+            //Cuối cùng là gán dữ liệu ở vị trí possition vào View và trả về đối
+            //tượng View này
+
+            return null;
         }
     }
 
