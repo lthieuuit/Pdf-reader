@@ -43,6 +43,7 @@ import android.view.Menu;
 
 
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
@@ -59,37 +60,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.net.Uri;
-import android.provider.OpenableColumns;
-import android.util.Log;
-import android.widget.Toast;
-
-
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    ArrayList<Product> listRecent;
+    RecentListViewAdapter recentListViewAdapter;
+    ListView listViewRecent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,12 +130,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-//         TabLayout tabLayout = findViewById(R.id.tab_home);
-//         tabLayout.setupWithViewPager(pager);
     }
 
-
+//ủa có mà ta :| tôi đéo professor như ông r
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -253,40 +232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void Showpdf(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1000 && resultCode == RESULT_OK) {
-        PDFView View;
-        TextView txt_view;
-        filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-        // Do anything with file
 
-
-        View = (PDFView) findViewById(R.id.pdfView);
-        txt_view = (TextView) findViewById(R.id.textview_txt);
-
-
-        View.setVisibility(View.VISIBLE);
-        txt_view.setVisibility(View.INVISIBLE);
-
-        View.fromFile(new File(filePath)).load();
-        }
-    }
-    public void Showtxt(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1000 && resultCode == RESULT_OK) {
-            PDFView View;
-            TextView txt_view;
-            filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-
-            View = (PDFView) findViewById(R.id.pdfView);
-            txt_view = (TextView) findViewById(R.id.textview_txt);
-
-            View.setVisibility(View.INVISIBLE);
-            txt_view.setVisibility(View.VISIBLE);
-
-            txt_view.setText(ReadTxt(filePath));
-        }
-    }
     // lấy dịnh dạng file
     private String getFileExtension(String filepath) {
         String name = filepath;
@@ -304,79 +250,28 @@ public class MainActivity extends AppCompatActivity {
         }
         return name.substring(lastIndexOf);
     }
-    ProductListViewAdapter productListViewAdapter;
-    ListView listViewProduct;
 
-    ListView listViewrecent;
-    public void Getrecentfile(String Filepath){
-        //productListViewAdapter = new ProductListViewAdapter(listViewrecent);
+    public void Getrecentfile()
+    {
+        //Khoi tao ListProduct
+        listRecent = new ArrayList<>();
+        listRecent.add(new Product(1, "Iphone 6", 500));
+        listRecent.add(new Product(2, "Iphone 7", 700));
+        listRecent.add(new Product(3, "Sony Abc", 800));
+        listRecent.add(new Product(4, "Samsung XYZ", 900));
+        listRecent.add(new Product(5, "SP 5", 500));
+        listRecent.add(new Product(6, "SP 6", 700));
+        listRecent.add(new Product(7, "SP 7", 800));
+        listRecent.add(new Product(8, "SP 8", 900));
 
-        listViewrecent = findViewById(R.id.listrecent);
-        listViewrecent.setAdapter(productListViewAdapter);
-    }
-    //Model phần tử dữ liệu hiện
-    class Product {
-        String name;
-        int price;
-        int productID;
 
-        public Product(int productID, String name, int price) {
-            this.name = name;
-            this.price = price;
-            this.productID = productID;
-        }
-
+        listViewRecent = findViewById(R.id.listrecent);
+        recentListViewAdapter = new RecentListViewAdapter(listRecent);
+        listViewRecent.setAdapter(recentListViewAdapter);
     }
 
-    class ProductListViewAdapter extends BaseAdapter {
-
-        //Dữ liệu liên kết bởi Adapter là một mảng các sản phẩm
-        final ArrayList<Product> listProduct;
-
-        ProductListViewAdapter(ArrayList<Product> listProduct) {
-            this.listProduct = listProduct;
-        }
-
-        @Override
-        public int getCount() {
-            //Trả về tổng số phần tử, nó được gọi bởi ListView
-            return listProduct.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            //Trả về dữ liệu ở vị trí position của Adapter, tương ứng là phần tử
-            //có chỉ số position trong listProduct
-            return listProduct.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            //Trả về một ID của phần
-            return listProduct.get(position).productID;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            //convertView là View của phần tử ListView, nếu convertView != null nghĩa là
-            //View này được sử dụng lại, chỉ việc cập nhật nội dung mới
-            //Nếu null cần tạo mới
-
-            View viewProduct;
-            if (convertView == null) {
-                //viewProduct = View.inflate(parent.getContext(), R.layout.product_view, null);
-            } else viewProduct = convertView;
-
-            //Bind sữ liệu phần tử vào View
-            Product product = (Product) getItem(position);
-            //((TextView) viewProduct.findViewById(R.id.nameproduct)).setText(String.format("Tên SP : %s", product.name));
-
-
-
-            return viewProduct;
-        }
-    }
-    class MyAdapter extends BaseAdapter {
+//ông thong thả. tôi đi đánh răng ăn sáng :\
+    public class MyAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -403,9 +298,78 @@ public class MainActivity extends AppCompatActivity {
 
             //Cuối cùng là gán dữ liệu ở vị trí possition vào View và trả về đối
             //tượng View này
-
+//wait
             return null;
         }
     }
 
+    public  class Product {
+        String name;
+        int time;
+        int docID;
+
+        public Product(int docID, String name, int time) {
+            this.name = name;
+            this.time = time;
+            this.docID = docID;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getTime() {
+            return time;
+        }
+    }
+
+    public class RecentListViewAdapter extends BaseAdapter {
+
+        //Dữ liệu liên kết bởi Adapter là một mảng các sản phẩm
+        final ArrayList<Product> listRecent;
+
+        RecentListViewAdapter(ArrayList<Product> listProduct) {
+            this.listRecent = listProduct;
+        }
+// đấy
+        @Override
+        public int getCount() {
+            //Trả về tổng số phần tử, nó được gọi bởi ListView
+            return listRecent.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            //Trả về dữ liệu ở vị trí position của Adapter, tương ứng là phần tử
+            //có chỉ số position trong listProduct
+            return listRecent.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            //Trả về một ID của phần
+            return listRecent.get(position).docID;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //convertView là View của phần tử ListView, nếu convertView != null nghĩa là
+            //View này được sử dụng lại, chỉ việc cập nhật nội dung mới
+            //Nếu null cần tạo mới
+
+            View viewProduct;
+            if (convertView == null) {
+                viewProduct = View.inflate(parent.getContext(), R.layout.recent_info, null);
+            } else viewProduct = convertView;
+
+            //Bind sữ liệu phần tử vào View
+            Product product = (Product) getItem(position);
+            ((TextView) viewProduct.findViewById(R.id.idrecent)).setText(String.format("ID = %d", product.docID));
+            ((TextView) viewProduct.findViewById(R.id.name)).setText(String.format("Tên tài liệu : %s", product.name));
+            ((TextView) viewProduct.findViewById(R.id.time)).setText(String.format("Mở lúc %d", product.time));
+
+
+            return viewProduct;
+        }
+    }
 }
