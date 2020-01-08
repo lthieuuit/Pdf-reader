@@ -23,6 +23,6 @@ Với việc đọc sách định dạng EPUB (định dạng ebook phổ biến
 	![screenshoot](https://github.com/lthieuuit/Pdf-reader/blob/master/Scrshot/Screenshot_1578421212.png)
 
 ## Sinh viên thực hiện 
-	 Lê Trung Hiếu
-	 Lê Đoàn
+	 Lê Trung Hiếu	17520476
+	 Lê Đoàn	17520348
 		
