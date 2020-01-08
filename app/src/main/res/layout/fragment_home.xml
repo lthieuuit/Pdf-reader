@@ -2,21 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    xmlns:tools="http://schemas.android.com/tools">
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager_home"
+<!--    xmlns:tools="http://schemas.android.com/tools">-->
+    <!--    <androidx.viewpager.widget.ViewPager-->
+    <!--        android:id="@+id/viewpager_home"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--    </androidx.viewpager.widget.ViewPager>-->
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/rv_File"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
+    <!--    </androidx.recyclerview.widget.RecyclerView>-->
+
+
+    <ImageView
+        android:id="@+id/home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.viewpager.widget.ViewPager>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_File"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:background="@drawable/hinhongoaihome">
 
-
-
+    </ImageView>
 
 </RelativeLayout>

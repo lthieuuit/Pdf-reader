@@ -10,14 +10,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.folioreader.FolioReader;
 import com.github.barteksc.pdfviewer.PDFView;
 
-import android.view.LayoutInflater;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -25,33 +25,20 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
-import com.pnhphamhieu.ebookreader.ui.home.HomeFragment;
-import com.pnhphamhieu.ebookreader.ui.home.PageAdapter;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
 
 
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
-
-import android.widget.RelativeLayout;
-
-
-import android.widget.ListView;
 
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,32 +51,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-
 public class MainActivity extends AppCompatActivity {
 
-
     private AppBarConfiguration mAppBarConfiguration;
-    ArrayList<Product> listRecent;
-    RecentListViewAdapter recentListViewAdapter;
-    ListView listViewRecent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        ViewPager pager = findViewById(R.id.viewpager_home);
-//        PageAdapter pageAdapter = new PageAdapter(getSupportFragmentManager());
-//        // DealListFragment = HomeFragment
-//        pageAdapter.add(HomeFragment.newInstance());
-//        pageAdapter.add(HomeFragment.newInstance());
-//        pager.setAdapter(pageAdapter);
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.viewpager_home, HomeFragment.newInstance());
-        ft.commit();
-
-//
-
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
         {
@@ -97,14 +65,13 @@ public class MainActivity extends AppCompatActivity {
         }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //FolioReader
 
+        //
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_openfile, R.id.nav_recents,
-                R.id.nav_favorites, R.id.nav_share, R.id.nav_send)
+                R.id.nav_home, R.id.nav_openfile, R.id.nav_about)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -119,20 +86,15 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_LONG).show();
                 }
                 if (destination.getId() == R.id.nav_openfile){
-                    Toast.makeText(MainActivity.this, "Đã chọn Open File", Toast.LENGTH_LONG).show();
-                }
-                if (destination.getId() == R.id.nav_recents){
-                    Toast.makeText(MainActivity.this, "Đã chọn Recents", Toast.LENGTH_LONG).show();
-                }
-                if (destination.getId() == R.id.nav_favorites){
-                    Toast.makeText(MainActivity.this, "Đã chọn Favorites", Toast.LENGTH_LONG).show();
+                    new MaterialFilePicker()
+                            .withActivity(MainActivity.this)
+                            .withRequestCode(1000)
+                            .withHiddenFiles(false) // Show hidden files and folders
+                            .start();
                 }
             }
         });
-
     }
-
-//ủa có mà ta :| tôi đéo professor như ông r
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,8 +141,9 @@ public class MainActivity extends AppCompatActivity {
         }
         return text.toString();
     }
-
-
+    PDFView View;
+    TextView txt_view;
+    TextView name;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -193,26 +156,35 @@ public class MainActivity extends AppCompatActivity {
             //tw2 = (TextView) findViewById(R.id.textView2);
             //tw2.setText(getFileExtension(filePath));
             if (getFileExtension(filePath).equalsIgnoreCase(".pdf") == true) {
-                PDFView View;
-                TextView txt_view;
+                name = (TextView) findViewById(R.id.tv_name) ;
+                name.setText(getFileName(filePath));
                 View = (PDFView) findViewById(R.id.pdfView);
                 txt_view = (TextView) findViewById(R.id.textview_txt);
                 View.setVisibility(View.VISIBLE);
                 txt_view.setVisibility(View.INVISIBLE);
                 View.fromFile(new File(filePath)).load();
+                //listRecent.add(new Product(1,filePath,filePath));
             }
             else if (getFileExtension(filePath).equalsIgnoreCase(".txt") == true)
             {
-                PDFView View;
-                TextView txt_view;
+                name = (TextView) findViewById(R.id.tv_name) ;
+                name.setText(getFileName(filePath));
                 View = (PDFView) findViewById(R.id.pdfView);
                 txt_view = (TextView) findViewById(R.id.textview_txt);
+                txt_view.setMovementMethod(new ScrollingMovementMethod());
                 View.setVisibility(View.INVISIBLE);
                 txt_view.setVisibility(View.VISIBLE);
-
+                //listRecent.add(new Product(1,filePath,filePath));
                 txt_view.setText(ReadTxt(filePath));
             }
-            else Toast.makeText(this, "Xin chọn file .PDF hoặc .TXT", Toast.LENGTH_SHORT).show();
+            else if (getFileExtension(filePath).equalsIgnoreCase(".epub") == true)
+            {
+                //Khởi tạo FolioReader
+                FolioReader folioReader = FolioReader.get();
+                //Đọc file epub từ filePath (local)
+                folioReader.openBook(filePath);
+            }
+            else Toast.makeText(this, "Xin chọn file .PDF, .EPUB hoặc .TXT", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -231,8 +203,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     // lấy dịnh dạng file
     private String getFileExtension(String filepath) {
         String name = filepath;
@@ -244,71 +214,21 @@ public class MainActivity extends AppCompatActivity {
     }
     private static String getFileName(String filepath) {
         String name = filepath;
-        int lastIndexOf = name.lastIndexOf("\\");
+        int lastIndexOf = name.lastIndexOf("/");
         if (lastIndexOf == -1) {
             return ""; // empty extension
         }
-        return name.substring(lastIndexOf);
+        return name.substring(lastIndexOf+1);
+        //Path path = Paths.get(filePath);
+        //Path fileName = path.getFileName();
     }
 
-    public void Getrecentfile()
-    {
-        //Khoi tao ListProduct
-        listRecent = new ArrayList<>();
-        listRecent.add(new Product(1, "Iphone 6", 500));
-        listRecent.add(new Product(2, "Iphone 7", 700));
-        listRecent.add(new Product(3, "Sony Abc", 800));
-        listRecent.add(new Product(4, "Samsung XYZ", 900));
-        listRecent.add(new Product(5, "SP 5", 500));
-        listRecent.add(new Product(6, "SP 6", 700));
-        listRecent.add(new Product(7, "SP 7", 800));
-        listRecent.add(new Product(8, "SP 8", 900));
-
-
-        listViewRecent = findViewById(R.id.listrecent);
-        recentListViewAdapter = new RecentListViewAdapter(listRecent);
-        listViewRecent.setAdapter(recentListViewAdapter);
-    }
-
-//ông thong thả. tôi đi đánh răng ăn sáng :\
-    public class MyAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            //Cần trả về số phần tử mà ListView hiện thị
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            //Cần trả về đối tượng dữ liệu phần tử ở vị trí position
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            //Trả về một ID liên quan đến phần tử ở vị trí position
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            //convertView là View hiện thị phần tử, nếu là null cần tạo mới
-            //(có thể nạp từ layout bằng View.inflate)
-
-            //Cuối cùng là gán dữ liệu ở vị trí possition vào View và trả về đối
-            //tượng View này
-//wait
-            return null;
-        }
-    }
-
-    public  class Product {
+    public static class Product {
         String name;
-        int time;
+        String time;
         int docID;
 
-        public Product(int docID, String name, int time) {
+        public Product(int docID, String name, String time) {
             this.name = name;
             this.time = time;
             this.docID = docID;
@@ -318,20 +238,20 @@ public class MainActivity extends AppCompatActivity {
             return name;
         }
 
-        public int getTime() {
+        public String getTime() {
             return time;
         }
-    }
 
-    public class RecentListViewAdapter extends BaseAdapter {
+    }
+    public static class RecentListViewAdapter extends BaseAdapter {
 
         //Dữ liệu liên kết bởi Adapter là một mảng các sản phẩm
-        final ArrayList<Product> listRecent;
+        final ArrayList<MainActivity.Product> listRecent;
 
-        RecentListViewAdapter(ArrayList<Product> listProduct) {
+        public RecentListViewAdapter(ArrayList<MainActivity.Product> listProduct) {
             this.listRecent = listProduct;
         }
-// đấy
+        // đấy
         @Override
         public int getCount() {
             //Trả về tổng số phần tử, nó được gọi bởi ListView
@@ -358,18 +278,17 @@ public class MainActivity extends AppCompatActivity {
             //Nếu null cần tạo mới
 
             View viewProduct;
-            if (convertView == null) {
-                viewProduct = View.inflate(parent.getContext(), R.layout.recent_info, null);
-            } else viewProduct = convertView;
+//            if (convertView == null) {
+//                viewProduct = convertView.inflate(parent.getContext(), R.layout.recent_info, null);
+//            } else viewProduct = convertView;
+//
+//            //Bind sữ liệu phần tử vào View
+//            MainActivity.Product product = (MainActivity.Product) getItem(position);
+//            ((TextView) viewProduct.findViewById(R.id.idrecent)).setText(String.format("ID = %d", product.docID));
+//            ((TextView) viewProduct.findViewById(R.id.name)).setText(String.format("Tên tài liệu : %s", product.name));
+//            ((TextView) viewProduct.findViewById(R.id.time)).setText(String.format("Mở lúc %d", product.time));
 
-            //Bind sữ liệu phần tử vào View
-            Product product = (Product) getItem(position);
-            ((TextView) viewProduct.findViewById(R.id.idrecent)).setText(String.format("ID = %d", product.docID));
-            ((TextView) viewProduct.findViewById(R.id.name)).setText(String.format("Tên tài liệu : %s", product.name));
-            ((TextView) viewProduct.findViewById(R.id.time)).setText(String.format("Mở lúc %d", product.time));
-
-
-            return viewProduct;
+            return convertView;
         }
     }
 }

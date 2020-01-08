@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.pnhphamhieu.ebookreader.MainActivity;
 import com.pnhphamhieu.ebookreader.R;
 
 import java.lang.String;
@@ -41,7 +43,6 @@ public class OpenfileFragment extends Fragment {
                 //textView.setText(s);
             }
         });
-
         return root;
     }
 

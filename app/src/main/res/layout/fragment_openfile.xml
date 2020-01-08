@@ -5,46 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/hinhongoaihome"></ImageView>
     <Button
         android:id="@+id/bt_cf"
-        android:layout_width="291dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="63dp"
-        android:layout_marginEnd="59dp"
-        android:layout_marginBottom="620dp"
+        android:elevation="20dp"
+        android:layout_width="152dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="254dp"
         android:onClick="click"
-        android:text="CHOOSE YOUR FILE"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="42dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="Chọn FILE"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_txt" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="400dp"
+        android:layout_height="30dp"
+        android:elevation="7dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="280dp"
+        android:background="@drawable/ggggg"
+        app:layout_constraintBottom_toTopOf="@+id/textview_txt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textview_txt"
         android:layout_width="400dp"
         android:layout_height="550dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="5dp"
+        android:scrollbars="vertical"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_cf" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/ggggg"
+        android:visibility="invisible"/>
+
 
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"
         android:layout_width="400dp"
         android:layout_height="550dp"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="70dp"
         android:layout_marginEnd="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_cf">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.43">
 
     </com.github.barteksc.pdfviewer.PDFView>
 
