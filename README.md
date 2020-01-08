@@ -9,7 +9,7 @@
 ## Ảnh minh hoạ
  //
 	![screenshoot](link)
-	![screenshoot](https://drive.google.com/file/d/1SdHFdO_mk1i9uoi6dTA5osmRpskwjUx1/view?usp=sharing)
+	![screenshoot](https://drive.google.com/drive/folders/1zfN0EnkCfSktjn4BUpKMoGW5LUxZ51O9)
 
 ## Sinh viên thực hiện 
 	 Lê Trung Hiếu
