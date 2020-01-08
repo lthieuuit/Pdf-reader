@@ -8,8 +8,8 @@
 	* 2
 ## Ảnh minh hoạ
  //
-	![alt text](link)
-	![alt text](link)
+	![screenshoot](link)
+	![screenshoot](https://drive.google.com/file/d/1SdHFdO_mk1i9uoi6dTA5osmRpskwjUx1/view?usp=sharing)
 
 ## Sinh viên thực hiện 
 	 Lê Trung Hiếu
