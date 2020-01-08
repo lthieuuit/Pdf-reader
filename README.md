@@ -8,8 +8,8 @@
 	* 2
 ## Ảnh minh hoạ
  //
-	![screenshoot](link)
-	![screenshoot](https://drive.google.com/drive/folders/1zfN0EnkCfSktjn4BUpKMoGW5LUxZ51O9)
+	![screenshoot](https://github.com/lthieuuit/Pdf-reader/blob/master/Scrshot/SplashScreen1.png)
+	![screenshoot](https://github.com/lthieuuit/Pdf-reader/blob/master/Scrshot/Screenshot_1578421212.png)
 
 ## Sinh viên thực hiện 
 	 Lê Trung Hiếu
